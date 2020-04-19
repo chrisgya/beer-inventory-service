@@ -1,0 +1,108 @@
+server:
+  port: ${PORT:0}
+#  servlet:
+#    context-path: /beer-service
+
+spring:
+  application:
+    name: inventory-service
+  redis:
+    host: localhost
+    port: 6379
+#    password:
+#    sentinel:
+#      master: masterredis
+#      nodes:
+#        - 10.0.0.16
+#        - 10.0.0.17
+#        - 10.0.0.18
+#    lettuce:
+#      pool:
+#        max-active: 7
+#        max-idle: 7
+#        min-idle: 2
+#        max-wait: -1ms
+#      shutdown-timeout: 200ms
+  cache:
+    redis:
+      cache-null-values: false
+      time-to-live: 600000
+      use-key-prefix: true
+    type: redis
+
+  datasource:
+    name: beer-shop-datasource
+    url: 'jdbc:postgresql://localhost:5432/beer_inventory_service'
+    username: postgres
+    password: ENC(j7OC/L6FZI+8d29tRAYsreDkvGb+V/XF)
+    hikari:
+      maximum-pool-size: 5
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+        useLocalSessionState: true
+        rewriteBatchedStatements: true
+        cacheResultSetMetadata: true
+        cacheServerConfiguration: true
+        elideSetAutoCommits: true
+        maintainTimeStats: false
+
+  jpa:
+    show-sql: true
+    hibernate:
+      # Hibernate ddl auto (create, create-drop, validate, update)
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  zipkin:
+    base-url: http://localhost:9411
+    sender:
+      type: web
+    sleuth:
+      sampler:
+        probability: 1
+  # credentials for this docker image - vromero/activemq-artemis
+  artemis:
+    user: admin
+    password: ENC(j7OC/L6FZI+8d29tRAYsreDkvGb+V/XF)
+#  flyway:
+#    enabled: false
+
+jasypt:
+  encryptor:
+    password: helw4345gr@%#5fgddlo@1
+
+
+# Enable logging for config troubleshooting
+logging:
+  level:
+    root: INFO
+#    org:
+#      hibernate:
+#        SQL: DEBUG
+#        type:
+#          descriptor:
+#            sql:
+#              BasicBinder: TRACE
+#    com:
+#      springboot:
+#        storedprocedure: DEBUG
+#      zaxxer:
+#        hikari:
+#          HikariConfig: DEBUG
+
+cache:
+  config:
+    default-configs:
+      -  cacheName: ONE_HOUR_CACHE
+         timeToLiveSeconds: 3600
+      -  cacheName: TEN_MINUTES_CACHE
+         timeToLiveSeconds: 600
+  app-caches:
+    app-cache-map:
+      allArticlesCache: ONE_HOUR_CACHE
+      articleCache: TEN_MINUTES_CACHE
